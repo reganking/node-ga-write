@@ -1,0 +1,17 @@
+{
+  "name": "ga-write",
+  "version": "1.0.0",
+  "description": "Demonstrate writing UA and GA4 events.",
+  "main": "app.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "author": "Regan King",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "geoip-lite": "^1.4.6",
+    "uuid": "^9.0.0"
+  }
+}
