@@ -89,7 +89,7 @@ console.log("Params: " + getParams)
       if (res.status >= 400) {
         throw new Error("Bad response from server")
       }
-      // res.json() will contain error message like the following, otherwise empty []
+      // res.json() will contain error message like the following
       /*
         [
           {
@@ -127,6 +127,7 @@ app.get('/', async (req, res, next) => {
   // Event value must be numeric.
 
   try {
+    // These are just test values.
     await trackEvent(
       'test_category',
       'test_action',
