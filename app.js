@@ -105,7 +105,7 @@ console.log("Params: " + getParams)
         return res.json() // In production this will result in "SyntaxError: Unexpected token G in JSON at position 0"
       }
       else {
-        console.log("Res production. Return empty. ")
+        console.log("Res production. Return empty.")
         return
       }
     })
