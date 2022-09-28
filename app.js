@@ -81,7 +81,7 @@ console.log("Params: " + getParams)
 /* POST takes body, GET does not seem to take params as a legal value? */
 
   /* Error: v is not seen */
-  return fetch(DEBUG_URL, {
+  return fetch(endpoint, {
       method: "POST",
       body: getParams
     })
@@ -100,28 +100,40 @@ console.log("Params: " + getParams)
           }
         ]
       */
-      return res.json();
-    })
-    .then(user => {
-      // User response.
-      console.log("User section: valid=" + user.hitParsingResult[0].valid)
-      if(JSON.parse(user.hitParsingResult[0].valid)) {
-        // Payload is valid
-        if(user.parserMessage[0].messageType === 'INFO') {
-          console.log("User, valid payload. Info: " +  user.parserMessage[0].description)
-        }
+      if (process.env.NODE_ENV !== 'production') {
+        console.log("Res development. Return res.json() to trigger user.")
+        return res.json() // In production this will result in "SyntaxError: Unexpected token G in JSON at position 0"
       }
       else {
-        if(user.hitParsingResult[0].parserMessage.length !== 0) {
-          console.log("User, invalid payload. Message: " + user.hitParsingResult[0].parserMessage)
+        console.log("Res production. Return empty.")
+        return
+      }
+    })
+    .then(user => {
+
+      if(typeof user !== 'undefined') {
+        // User response.
+        console.log("User section ..." + user.length)
+        console.log("User section: valid=" + user.hitParsingResult[0].valid)
+        if(JSON.parse(user.hitParsingResult[0].valid)) {
+          // Payload is valid
+          if(user.parserMessage[0].messageType === 'INFO') {
+            console.log("User, valid payload. Info: " +  user.parserMessage[0].description)
+          }
+        }
+        else {
+          if(user.hitParsingResult[0].parserMessage.length !== 0) {
+            console.log("User, invalid payload. Message: " + user.hitParsingResult[0].parserMessage)
+          }
         }
       }
+
     })
     .catch(err => {
       // Handle error response.
       console.error(err)
     })
-};
+}
 
 app.get('/', async (req, res, next) => {
   // Event value must be numeric.
@@ -135,7 +147,7 @@ app.get('/', async (req, res, next) => {
       '100',
       req
     );
-    res.status(200).send('Event tracked.').end();
+    res.status(200).send('Event tracked.').end()
   } catch (error) {
     console.log("Received an error.")
     // This sample treats an event tracking error as a fatal error. Depending
